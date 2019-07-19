@@ -5,12 +5,12 @@
     <div class="w3-content w3-display-container">
       <img v-for="image in result.images" :key='image' class="mySlides" :src="image.src" style="width:100%">
 
-      <button class="w3-button w3-black w3-display-left" onclick="plusDivs(-1)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" onclick="plusDivs(1)">&#10095;</button>
+      <button class="w3-button w3-black w3-display-left" v-on:click="plusDivs(-1)">&#10094;</button>
+      <button class="w3-button w3-black w3-display-right" v-on:click="plusDivs(1)">&#10095;</button>
     </div>
 
     <form>
-      <fieldset>
+      <fieldset style='margin: 0 30%'>
         <legend>Detalhes:</legend>
         <div class='au-mp-features-list'>
           <ul>
@@ -32,9 +32,9 @@
         </div>
       </fieldset>
 
-      <fieldset>
+      <fieldset class="field-tight">
         <legend>Your subscription:</legend>
-        <div class='au-mp-features-list'>
+        <div>
           <ul>
             <li>
               <h1>{{ result.pricing.price }} € per month</h1>
@@ -57,7 +57,23 @@ export default {
   data () {
     return {
       id: 0,
-      result: null
+      result: null,
+      slideIndex: 1
+    }
+  },
+  methods: {
+    showDivs: function (n) {
+      var i
+      var x = document.getElementsByClassName('mySlides')
+      if (n > x.length) { this.slideIndex = 1 }
+      if (n < 1) { this.slideIndex = x.length }
+      for (i = 0; i < x.length; i++) {
+        x[i].style.display = 'none'
+      }
+      x[this.slideIndex - 1].style.display = 'block'
+    },
+    plusDivs: function (n) {
+      this.showDivs(this.slideIndex += n)
     }
   },
   created () {
@@ -66,25 +82,8 @@ export default {
       .then(response => {
         this.result = response.data
       })
+    this.showDivs(2)
   }
-}
-
-var slideIndex = 1
-showDivs(slideIndex)
-
-function plusDivs (n) {
-  showDivs(slideIndex += n)
-}
-
-function showDivs (n) {
-  var i
-  var x = document.getElementsByClassName('mySlides')
-  if (n > x.length) { slideIndex = 1 }
-  if (n < 1) { slideIndex = x.length }
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = 'none'
-  }
-  x[slideIndex - 1].style.display = 'block'
 }
 </script>
 
@@ -105,9 +104,16 @@ li {
 a {
   color: #42b983;
 }
-.au-mp-fblock .au-mp-features-list {
-    float: left;
-    min-width: 30%;
-    padding-right: 25px;
+.au-mp-features-list {
+    display: inline-table;
+    text-align: center;
+    justify-content: center;
+    max-width: 30%;
+}
+.w3-content {
+  max-width: 60% !important;
+}
+.field-tight {
+  display: -webkit-inline-box;
 }
 </style>
