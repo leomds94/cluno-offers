@@ -1,37 +1,21 @@
 <template>
   <div class="hello">
+    <router-link :to="{ name: 'offers'}">
+      <a style='display:flex;padding-left:25%'>Back</a>
+    </router-link>
+
     <h2>{{ result.car.make }} {{ result.car.model }} {{ result.car.version }}</h2>
 
-    <div class="w3-content w3-display-container">
-      <img v-for="image in result.images" :key='image' class="mySlides" :src="image.src" style="width:100%">
-
-      <button class="w3-button w3-black w3-display-left" v-on:click="plusDivs(-1)">&#10094;</button>
-      <button class="w3-button w3-black w3-display-right" v-on:click="plusDivs(1)">&#10095;</button>
-    </div>
+    <b-carousel
+      :interval="4000"
+      @sliding-start="onSlideStart"
+      @sliding-end="onSlideEnd"
+      controls
+    >
+      <b-carousel-slide v-for="image in result.images" :key='image' class="mySlides" :img-src="image.src"></b-carousel-slide>
+    </b-carousel>
 
     <form>
-      <fieldset style='margin: 0 30%'>
-        <legend>Detalhes:</legend>
-        <div class='au-mp-features-list'>
-          <ul>
-            <li v-for="detail in result.car.equipmentDetails" :key='detail'>
-              {{ detail }}
-            </li>
-          </ul>
-        </div>
-        <div class='au-mp-features-list'>
-          <ul>
-            <li>
-              {{ result.car.kw }} kW / {{ result.car.ps }} hp
-            </li>
-            <li>{{ result.car.gearingType }}</li>
-            <li>{{ result.car.drive }}</li>
-            <li>{{ result.car.fueltype }}</li>
-            <li>{{ result.car.doors }} doors</li>
-          </ul>
-        </div>
-      </fieldset>
-
       <fieldset class="field-tight">
         <legend>Your subscription:</legend>
         <div>
@@ -45,6 +29,21 @@
         </div>
       </fieldset>
 
+      <fieldset style="width: 35%; margin: auto">
+        <legend>Details:</legend>
+        <b-row>
+          <b-col lg='6' v-for="detail in result.car.equipmentDetails" :key='detail'>
+            {{ detail }}
+          </b-col>
+          <b-col lg='6'>
+            {{ result.car.kw }} kW / {{ result.car.ps }} hp
+          </b-col>
+          <b-col lg='6'>{{ result.car.gearingType }}</b-col>
+          <b-col lg='6'>{{ result.car.drive }}</b-col>
+          <b-col lg='6'>{{ result.car.fueltype }}</b-col>
+          <b-col lg='6'>{{ result.car.doors }} doors</b-col>
+        </b-row>
+      </fieldset>
     </form>
   </div>
 </template>
@@ -58,22 +57,16 @@ export default {
     return {
       id: 0,
       result: null,
-      slideIndex: 1
+      slide: 0,
+      sliding: null
     }
   },
   methods: {
-    showDivs: function (n) {
-      var i
-      var x = document.getElementsByClassName('mySlides')
-      if (n > x.length) { this.slideIndex = 1 }
-      if (n < 1) { this.slideIndex = x.length }
-      for (i = 0; i < x.length; i++) {
-        x[i].style.display = 'none'
-      }
-      x[this.slideIndex - 1].style.display = 'block'
+    onSlideStart (slide) {
+      this.sliding = true
     },
-    plusDivs: function (n) {
-      this.showDivs(this.slideIndex += n)
+    onSlideEnd (slide) {
+      this.sliding = false
     }
   },
   created () {
@@ -82,38 +75,28 @@ export default {
       .then(response => {
         this.result = response.data
       })
-    this.showDivs(2)
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
+
+.carousel-indicators li {
+  background-color: #777 !important;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.carousel.pointer-event {
+  width: 50%;
+  margin: auto;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.carousel-control-prev .carousel-control-next {
+  background-image: linear-gradient(to left, black , white) !important;
 }
-a {
-  color: #42b983;
+
+.carousel-control-prev {
+  background-image: linear-gradient(to right, black , white) !important;
 }
-.au-mp-features-list {
-    display: inline-table;
-    text-align: center;
-    justify-content: center;
-    max-width: 30%;
-}
-.w3-content {
-  max-width: 60% !important;
-}
-.field-tight {
-  display: -webkit-inline-box;
-}
+
 </style>

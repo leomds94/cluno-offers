@@ -1,16 +1,42 @@
 <template>
   <div class="hello">
     <h1>{{ msg }}</h1>
-    <!-- <h2>{{ results.items }}</h2> -->
-    <input type="text" v-model="search" placeholder="search cars">
-    <ul>
-      <li v-for="offer in filteredOffers" :key="offer">
-        <router-link :to="{ name: 'offer-detail', params: { id: offer.id } }">
-          <img :src="offer.teaser.teaserImage" />
-          <h2>{{ offer.teaser.title }}</h2>
-        </router-link>
-      </li>
-    </ul>
+    <br/>
+
+    <b-form>
+      <b-row>
+        <b-col lg="6">
+          <b-form-group
+          id="input-group-1"
+          label="Name:"
+          label-for="input-1"
+          >
+            <b-input-group class="mt-3">
+              <b-form-input id="input-1" type="text" v-model="search"></b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+      </b-row>
+    </b-form>
+    <br/>
+    <b-row>
+      <b-col md="4" v-for="offer in filteredOffers" :key="offer">
+        <b-card
+          :title='offer.teaser.title'
+          :img-src='offer.teaser.teaserImage'
+          img-alt="Image"
+          img-top
+          tag="article"
+          class="mb-2"
+        >
+          <!-- <b-card-text>
+          </b-card-text> -->
+          <router-link :to="{ name: 'offer-detail', params: { id: offer.id } }">
+            <b-button variant="primary">More details</b-button>
+          </router-link>
+        </b-card>
+      </b-col>
+    </b-row>
   </div>
 
 </template>
@@ -44,20 +70,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1,
-h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+
+.row {
+  margin-left: unset;
+  margin-right: unset;
 }
 
 </style>
