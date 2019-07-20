@@ -86,12 +86,9 @@ export default {
   computed: {
     filteredOffers: function () {
       return this.results.filter((offer) => {
-        var filtered = true
-        var min = true
-        var max = true
-        if (this.search !== '') { filtered = offer.teaser.title.match(this.search) }
-        if (this.min) { min = offer.pricing.price ? (offer.pricing.price >= this.min) : true }
-        if (this.max) { max = offer.pricing.price ? (offer.pricing.price <= this.max) : true }
+        var filtered = this.search !== '' ? offer.teaser.title.match(this.search) : true
+        var min = this.min ? (offer.pricing.price >= this.min) : true
+        var max = this.max ? (offer.pricing.price <= this.max) : true
         return filtered && min && max
       })
     }
