@@ -73,8 +73,8 @@ export default {
     return {
       msg: 'Your new car is Cluno - monthly fixed rate & everything in it, except complicated',
       search: '',
-      min: 0,
-      max: 0,
+      min: null,
+      max: null,
       results: []
     }
   },
@@ -86,9 +86,12 @@ export default {
   computed: {
     filteredOffers: function () {
       return this.results.filter((offer) => {
-        var filtered = offer.teaser.title.match(this.search)
-        var min = offer.pricing.price ? (offer.pricing.price >= this.min) : true
-        var max = offer.pricing.price ? (offer.pricing.price <= this.max) : true
+        var filtered = true
+        var min = true
+        var max = true
+        if (this.search !== '') { filtered = offer.teaser.title.match(this.search) }
+        if (this.min) { min = offer.pricing.price ? (offer.pricing.price >= this.min) : true }
+        if (this.max) { max = offer.pricing.price ? (offer.pricing.price <= this.max) : true }
         return filtered && min && max
       })
     }
