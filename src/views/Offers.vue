@@ -16,6 +16,28 @@
             </b-input-group>
           </b-form-group>
         </b-col>
+        <b-col lg="3">
+          <b-form-group
+          id="input-group-1"
+          label="Min price:"
+          label-for="input-1"
+          >
+            <b-input-group class="mt-3">
+              <b-form-input id="input-1" type="text" v-model="min"></b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+        <b-col lg="3">
+          <b-form-group
+          id="input-group-1"
+          label="Max price:"
+          label-for="input-1"
+          >
+            <b-input-group class="mt-3">
+              <b-form-input id="input-1" type="text" v-model="max"></b-form-input>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
       </b-row>
     </b-form>
     <br/>
@@ -29,6 +51,7 @@
           tag="article"
           class="mb-2"
         >
+        <h2>{{ offer.pricing.price }} {{ offer.pricing.currencySymbol }}</h2>
           <!-- <b-card-text>
           </b-card-text> -->
           <router-link :to="{ name: 'offer-detail', params: { id: offer.id } }">
@@ -50,6 +73,8 @@ export default {
     return {
       msg: 'Your new car is Cluno - monthly fixed rate & everything in it, except complicated',
       search: '',
+      min: 0,
+      max: 0,
       results: []
     }
   },
@@ -61,7 +86,10 @@ export default {
   computed: {
     filteredOffers: function () {
       return this.results.filter((offer) => {
-        return offer.teaser.title.match(this.search)
+        var filtered = offer.teaser.title.match(this.search)
+        var min = offer.pricing.price ? (offer.pricing.price >= this.min) : true
+        var max = offer.pricing.price ? (offer.pricing.price <= this.max) : true
+        return filtered && min && max
       })
     }
   }
