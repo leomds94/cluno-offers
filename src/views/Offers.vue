@@ -51,11 +51,12 @@
           tag="article"
           class="mb-2"
         >
-        <h2>{{ offer.pricing.price }} {{ offer.pricing.currencySymbol }}</h2>
+        <h3>{{ offer.pricing.price }} {{ offer.pricing.currencySymbol }} per month</h3>
+        <br/>
           <!-- <b-card-text>
           </b-card-text> -->
           <router-link :to="{ name: 'offer-detail', params: { id: offer.id } }">
-            <b-button variant="primary">More details</b-button>
+            <b-button pill variant="outline-primary" size='lg'>More details</b-button>
           </router-link>
         </b-card>
       </b-col>
@@ -102,6 +103,10 @@ export default {
 .row {
   margin-left: unset;
   margin-right: unset;
+}
+
+.card {
+  border-radius: 10px;
 }
 
 </style>
